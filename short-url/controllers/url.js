@@ -3,6 +3,7 @@ import shortid from "shortid";
 
 export async function creteShortId(req,res) {
     const { redirectionUrl } = req.body;
+      const userId=req.user._id;
     console.log(req.body);
     if(!redirectionUrl|| !req.body){
         return res.status(400).json({
@@ -15,7 +16,8 @@ export async function creteShortId(req,res) {
     await Url.create({
         shortId,
         redirectionUrl,
-        visitedHistory:[]
+        visitedHistory:[],
+        createdBy:userId,
     });
 
     return res.status(200).json({
@@ -41,6 +43,14 @@ export async function getOriginalUrl(req,res){
     });
     //console.log(entry);
     res.redirect(entry.redirectionUrl);
+}
+
+export async function getAllUserUrl(req,res){
+    const userId = req.user._id;
+    const urls = await Url.find({ createdBy: userId });
+
+    //console.log(entry);
+    res.status(400).json({urls});
 }
 
 

@@ -1,4 +1,5 @@
 import mongoose,{Schema} from "mongoose";
+import User from "./user.js";
 
 
 const urlSchema=new Schema({
@@ -17,7 +18,11 @@ const urlSchema=new Schema({
                 type:Number
             }
         }
-    ]
+    ],
+    createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:User
+    }
 },{
     timestamps:true
 })

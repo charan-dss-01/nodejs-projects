@@ -1,16 +1,23 @@
 import express from "express"
 import connect from "./connection.js";
+import cookieParser from "cookie-parser";
+
+
 import urlRouter from "./routes/url.js"
+import userRouter from "./routes/user.js"
+import {isLoggined} from "./middleware/auth.js"
+
 
 const app=express();
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 
-// (Optional) To parse form data (if you send via HTML form)
-app.use(express.urlencoded({ extended: true }));
 
+app.use("/url",isLoggined,urlRouter);
+app.use("/user",userRouter);
 
-app.use("/url",urlRouter);
 
 
 connect();
