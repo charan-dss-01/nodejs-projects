@@ -1,9 +1,11 @@
 import Url from "../models/url.js"
 import shortid from "shortid";
+import { getUser } from "../services/auth.js";
 
 export async function creteShortId(req,res) {
     const { redirectionUrl } = req.body;
-      const userId=req.user._id;
+    const user=getUser(req.cookies?.uid);
+    const userId=user.id;
     console.log(req.body);
     if(!redirectionUrl|| !req.body){
         return res.status(400).json({
@@ -50,7 +52,7 @@ export async function getAllUserUrl(req,res){
     const urls = await Url.find({ createdBy: userId });
 
     //console.log(entry);
-    res.status(400).json({urls});
+    res.status(200).json({urls});
 }
 
 

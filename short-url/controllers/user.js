@@ -40,9 +40,14 @@ export async function handleUserLogin(req,res){
 
         const user=await User.findOne({email,password});
         
-        const sessionId =uuidv4();
-        setUser(sessionId,user);
-        res.cookie("uid",sessionId);
+        if(!user){
+            return res.status(400).json({
+                msg:"user not found"
+            })
+        }
+
+        const token=setUser(user);
+        res.cookie("uid",token);
 
         return res.status(200).json({
             msg:"User loginned Successfully",
